@@ -10,7 +10,15 @@
   <!-- add a wrapper element into the document... -->
 </head>
 <body>
-A button
-  <clipchamp-btn label="some title" />
+A button:
+
+<clipchamp-btn inputs='["file"]' title="A custom title" label="A custom clipchamp button" size="large">
+</clipchamp-btn>
+
+<script type="text/javascript">
+    document.querySelector('clipchamp-btn').addEventListener('onWebcamStatusChange', function(event) {
+        console.log('event fired!', event.type, event);
+    });
+</script>
 </body>
 </html>

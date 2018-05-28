@@ -1,14 +1,17 @@
 import api_key from '../../api_key.js';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 
 declare const clipchamp;
 
 @Component({
-    // selector: 'clipchamp-btn',
+    selector: 'clipchamp-btn',
     templateUrl: './clipchamp.component.html',
-    styleUrls: ['./clipchamp.component.css']
+    styleUrls: ['./clipchamp.component.css'],
+    encapsulation: ViewEncapsulation.Native
 })
-export class ClipchampBtn implements OnInit {
+export class ClipchampComponent implements OnInit {
+    private clipchamp = null;
+
     @Input()
     public label = 'Upload with Clipchamp!';
 
@@ -19,34 +22,40 @@ export class ClipchampBtn implements OnInit {
     public title = 'Ye\' olde video-upload shoppe';
 
     @Input()
-    public output = 'dummy';
+    public inputs = ['file', 'camera'];
 
     @Input()
-    public input
+    public output = 'dummy';
 
-    private clipchamp: any;
+    @Output()
+    public onWebcamStatusChange: EventEmitter<any> = new EventEmitter();
+
+    get clipchampOptions() {
+        console.log(this.inputs);
+        return {
+            title: this.title,
+            output: this.output,
+            inputs: this.inputs,
+            onWebcamStatusChange: (...args) => this.onWebcamStatusChange.emit(args),
+        };
+    }
 
     onClick() {
-        // this.clipchamp.open();
-        console.log(this.label);
+        this.clipchamp.open();
     }
 
     injectScript() {
         const script = document.createElement('script');
         script.onload = function () {
-            this.clipchamp = clipchamp({
-                label: this.label
-            });
+            console.log('script onload', this);
+            this.clipchamp = clipchamp(this.clipchampOptions);
         }.bind(this);
         script.src = `https://api.clipchamp.com/${api_key}/button.js`;
         script.type = 'text/javascript';
-        document.head.appendChild(script); // or something of the likes
+        document.head.appendChild(script);
     }
 
     ngOnInit() {
-        console.log(this);
-        console.log('123123123', this.label);
-
         document.onreadystatechange = function (e) {
             if (document.readyState === 'complete') {
                 this.injectScript();

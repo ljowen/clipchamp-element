@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<clipchamp-btn label="some 123"></clipchamp-btn>
+<script src="dist/clipchampElement/polyfills.js"></script>
+<script src="dist/clipchampElement/vendor.js"></script>
+<script src="dist/clipchampElement/runtime.js"></script>
+<script src="dist/clipchampElement/main.js"></script>
+<script src="dist/clipchampElement/scripts.js"></script>
+<script src="dist/clipchampElement/styles.js"></script>
+<script type="text/javascript">
+    const ccb = document.querySelector('clipchamp-btn');
+    ccb.addEventListener('onWebcamStatusChange', function(event) {
+        console.log('event fired!', event.detail);
+    });
+
+    setTimeout(() => ccb.label = 'Second Value', 3000);
+</script>
+</body>
+</html>

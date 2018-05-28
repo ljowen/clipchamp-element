@@ -39,4 +39,4 @@ testem.log
 Thumbs.db
 
 #API key
-src/api_key.js
+/src/api_key.js
