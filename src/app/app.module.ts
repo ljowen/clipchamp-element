@@ -14,9 +14,9 @@ import { createCustomElement } from '@angular/elements';
   imports: [
     BrowserModule
   ],
-  providers: [],
   bootstrap: [ClipchampComponent]
 })
+
 export class AppModule {
   constructor(private injector: Injector) {
     const customElement = createCustomElement(ClipchampComponent, {injector});

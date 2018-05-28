@@ -1,6 +1,9 @@
 import api_key from '../../api_key.js';
 import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 
+declare global {
+    interface Window { clipchamp: any; }
+}
 declare const clipchamp;
 
 @Component({
@@ -31,24 +34,25 @@ export class ClipchampComponent implements OnInit {
     public onWebcamStatusChange: EventEmitter<any> = new EventEmitter();
 
     get clipchampOptions() {
-        console.log(this.inputs);
         return {
             title: this.title,
             output: this.output,
-            inputs: this.inputs,
+            // Web components should support arrays in Dom props but test case shows otherwise
+            inputs: Array.isArray(this.inputs) ? this.inputs : JSON.parse(this.inputs),
             onWebcamStatusChange: (...args) => this.onWebcamStatusChange.emit(args),
         };
     }
 
     onClick() {
-        this.clipchamp.open();
+        window.clipchamp.update(this.clipchampOptions);
+        window.clipchamp.open();
     }
 
+    // @todo refactor this into a singleton service
     injectScript() {
         const script = document.createElement('script');
         script.onload = function () {
-            console.log('script onload', this);
-            this.clipchamp = clipchamp(this.clipchampOptions);
+            window.clipchamp = clipchamp(this.clipchampOptions);
         }.bind(this);
         script.src = `https://api.clipchamp.com/${api_key}/button.js`;
         script.type = 'text/javascript';
