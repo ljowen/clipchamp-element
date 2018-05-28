@@ -1,16 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {Injector, NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import { ClipchampBtn } from './clipchamp-btn/clipchamp.component';
+import { createCustomElement } from '@angular/elements';
 
 @NgModule({
   declarations: [
-    AppComponent
+    ClipchampBtn
   ],
   imports: [
     BrowserModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ClipchampBtn]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    const customElement = createCustomElement(ClipchampBtn, {injector});
+    customElements.define('clipchamp-btn', customElement);
+  }
+
+  ngDoBootstrap() { }
+}
